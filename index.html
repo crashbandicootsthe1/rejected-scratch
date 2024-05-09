@@ -3,10 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rejected Scratch - Imagine, Program, Share</title>
+    <title>Scratch Front Page</title>
+    <style>
+        .row {
+            margin-bottom: 20px;
+        }
+
+        .project-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .project {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: calc(33.33% - 10px); /* Adjust width based on number of projects per row */
+        }
+
+        .project a {
+            text-decoration: none;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
     <h1>Scratch Front Page Projects</h1>
+
     <div id="projects"></div>
 
     <script>
@@ -20,14 +43,25 @@
         // Function to display projects on the webpage
         function displayProjects(projects) {
             const projectsDiv = document.getElementById('projects');
-            projects.forEach(project => {
-                const projectLink = document.createElement('a');
-                projectLink.href = `https://scratch.mit.edu/projects/${project.id}/`;
-                projectLink.textContent = project.title;
-                projectLink.target = "_blank"; // Open link in new tab
-                const projectElement = document.createElement('div');
-                projectElement.appendChild(projectLink);
-                projectsDiv.appendChild(projectElement);
+
+            projects.forEach(row => {
+                const rowDiv = document.createElement('div');
+                rowDiv.classList.add('row');
+
+                row.forEach(project => {
+                    const projectLink = document.createElement('a');
+                    projectLink.href = `https://scratch.mit.edu/projects/${project.id}/`;
+                    projectLink.textContent = project.title;
+                    projectLink.target = "_blank"; // Open link in new tab
+
+                    const projectContainer = document.createElement('div');
+                    projectContainer.classList.add('project');
+                    projectContainer.appendChild(projectLink);
+
+                    rowDiv.appendChild(projectContainer);
+                });
+
+                projectsDiv.appendChild(rowDiv);
             });
         }
 
@@ -35,9 +69,9 @@
         window.onload = async function() {
             try {
                 const scratchProjects = await fetchScratchProjects();
-                displayProjects(scratchProjects);
+                displayProjects(scratchProjects.rows);
             } catch (error) {
-                console.error('Error fetching Scratch projects:', error);
+                window.alert('Error fetching Scratch projects:', error);
             }
         };
     </script>
