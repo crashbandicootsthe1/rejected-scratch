@@ -52,6 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     })
     .catch(error => {
+      // Display error message on the webpage
+      const errorMessage = document.createElement('p');
+      errorMessage.textContent = 'Error fetching featured projects. Please try again later.';
+      thumbnailsContainer.appendChild(errorMessage);
       console.error('Error fetching featured projects:', error);
     });
 });
