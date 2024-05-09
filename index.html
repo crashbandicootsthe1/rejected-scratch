@@ -1,28 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rejected Scratch - Imagine, Program, Share</title>
-  <!-- Include any CSS files or stylesheets here -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rejected Scratch - Imagine, Program, Share</title>
 </head>
 <body>
-  <header>
-    <h1>Welcome to Scratch</h1>
-    <!-- any header content here -->
-  </header>
-  
-  <main>
-    <section id="featured-thumbnails">
-      <!-- featured project thumbnails will be dynamically added here -->
-    </section>
-  </main>
+    <h1>Scratch Front Page Projects</h1>
+    <div id="projects"></div>
 
-  <footer>
-    <!-- any footer content here -->
-  </footer>
+    <script>
+        // Function to fetch data from the Scratch API
+        async function fetchScratchProjects() {
+            const response = await fetch('https://api.scratch.mit.edu/proxy/featured');
+            const data = await response.json();
+            return data;
+        }
 
-  <!-- js file(s) here -->
-  <script src="home.js"></script>
+        // Function to display projects on the webpage
+        function displayProjects(projects) {
+            const projectsDiv = document.getElementById('projects');
+            projects.forEach(project => {
+                const projectLink = document.createElement('a');
+                projectLink.href = `https://scratch.mit.edu/projects/${project.id}/`;
+                projectLink.textContent = project.title;
+                projectLink.target = "_blank"; // Open link in new tab
+                const projectElement = document.createElement('div');
+                projectElement.appendChild(projectLink);
+                projectsDiv.appendChild(projectElement);
+            });
+        }
+
+        // Fetch projects and display them when the page loads
+        window.onload = async function() {
+            try {
+                const scratchProjects = await fetchScratchProjects();
+                displayProjects(scratchProjects);
+            } catch (error) {
+                console.error('Error fetching Scratch projects:', error);
+            }
+        };
+    </script>
 </body>
 </html>
