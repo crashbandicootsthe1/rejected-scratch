@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
   fetch('https://api.scratch.mit.edu/proxy/featured')
     .then(response => response.json())
     .then(data => {
+      // Alert the entire API response
+      window.alert('API Response: ' + JSON.stringify(data));
+
       // Select the container element for featured project thumbnails
       const thumbnailsContainer = document.getElementById('featured-thumbnails');
 
@@ -14,6 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!Array.isArray(data[category])) {
           return;
         }
+
+        // Alert the category name
+        window.alert('Category: ' + category);
 
         // Create a container for the category
         const categoryContainer = document.createElement('div');
@@ -52,10 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     })
     .catch(error => {
-      // Display error message on the webpage
-      const errorMessage = document.createElement('p');
-      errorMessage.textContent = 'Error fetching featured projects. Please try again later.';
-      thumbnailsContainer.appendChild(errorMessage);
-      window.alert('Error fetching featured projects:', error);
+      // Display error alert
+      window.alert('Error fetching featured projects. Please try again later.');
+      console.error('Error fetching featured projects:', error);
     });
 });
