@@ -10,11 +10,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Iterate over each category of featured projects
       Object.keys(data).forEach(category => {
-        // Get the array of projects for the current category
-        const projects = data[category];
+        // Skip categories that don't contain projects
+        if (!Array.isArray(data[category])) {
+          return;
+        }
+
+        // Create a container for the category
+        const categoryContainer = document.createElement('div');
+        categoryContainer.classList.add('category');
+        
+        // Create a heading for the category
+        const categoryHeading = document.createElement('h2');
+        categoryHeading.textContent = category.replace(/_/g, ' '); // Replace underscores with spaces
+        categoryContainer.appendChild(categoryHeading);
+
+        // Create a container for thumbnails in the category
+        const projectThumbnailsContainer = document.createElement('div');
+        projectThumbnailsContainer.classList.add('thumbnails-container');
 
         // Iterate over the projects in the current category
-        projects.forEach(project => {
+        data[category].forEach(project => {
           // Create an <img> element for the thumbnail
           const thumbnail = document.createElement('img');
           thumbnail.src = project.thumbnail;
@@ -25,14 +40,15 @@ document.addEventListener('DOMContentLoaded', () => {
           link.href = `https://scratch.mit.edu/projects/${project.id}/`;
           link.appendChild(thumbnail);
 
-          // Create a container for the category and append the thumbnail
-          const categoryContainer = document.createElement('div');
-          categoryContainer.classList.add('category-container');
-          categoryContainer.appendChild(link);
-
-          // Append the category container to the thumbnails container
-          thumbnailsContainer.appendChild(categoryContainer);
+          // Append the thumbnail to the thumbnails container
+          projectThumbnailsContainer.appendChild(link);
         });
+
+        // Append the thumbnails container to the category container
+        categoryContainer.appendChild(projectThumbnailsContainer);
+
+        // Append the category container to the thumbnails container
+        thumbnailsContainer.appendChild(categoryContainer);
       });
     })
     .catch(error => {
